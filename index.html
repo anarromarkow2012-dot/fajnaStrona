@@ -1,59 +1,194 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="refresh" content="0; url=index2.html">
-        <title>
-            Fajna Strona
-        </title>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Fajna Strona</title>
 
+<style>
+body{background:paleturquoise;font-family:Arial}
 
+#hackScreen{
+ display:none;position:fixed;inset:0;
+ background:red;color:white;z-index:9999;
+ text-align:center;
+ animation:blink .5s infinite;
+}
+@keyframes blink{0%{background:red}50%{background:darkred}100%{background:red}}
 
-    </head>
-    <body style="background-color: paleturquoise;"> 
-        <h1 style="background-color: tomato;color:chartreuse;text-align: center;">  
-            Jakiś nagłówek
-        </h1>
-        <p><b><i><mark>
-            B<sub>L</sub>LEBLIBLUBAL <br>
-            BLUBLELIBLAB<sup>I</sup>LU
-            </ii>
-            </b>
-            </mark>
-        </p>
-        <p>
-            ta strona jest normalistycznie marchewkowa
-        </p>
-        najlepsza strona
-        <a href="https://taniefajerwerki.pl"><img src="https://www.forumfajerwerki.pl/uploads/monthly_2018_12/IMG_20181229_192129.jpg.7b00165efe1ef26a5f5254ce82a4bf0f.jpg" width="300" height="400" alt="fajerwerki">
-</a>     <br>
-        TWORZYŁ TO ANTONI MARKOWSKI
-         <br>
-         <br>
-        kliknij obrazek
-        <br>
-        <table style="border:20px solid teal">
-            <tr>bllllikdzik</tr>
-            <tr>
-                <td>
-                    poland
-                </td>
-                <td>
-                    skibidiPAINTkrypto/hackTROJAN
-                </td>
-            </tr>
-        </table>
-        <ol>
-            <li>
-                to bardzo niebezpieczne 
-            </li>
-            <li>
-                co zrobiłeś????
-            </li>
-            <li>
-                to twój problem
-            </li>
-        </ol>
+.box{
+ background:black;color:lime;font-family:monospace;
+ width:90%;margin:8px auto;padding:8px;
+ height:130px;overflow:auto;text-align:left;
+}
 
-        
-    </body>
+#bsod{
+ display:none;position:fixed;inset:0;
+ background:#0078d7;color:white;
+ font-family:"Segoe UI";padding:60px;
+ z-index:10000;
+}
+
+#reset{
+ display:none;position:fixed;inset:0;
+ background:black;color:lime;
+ font-family:monospace;padding:20px;
+ z-index:11000;
+}
+</style>
+</head>
+
+<body>
+
+<button onclick="startHack()">Start</button>
+
+<h1 style="background:tomato;color:chartreuse;text-align:center">
+Jakiś nagłówek
+</h1>
+
+<p>ta strona jest normalistycznie marchewkowa</p>
+
+<div id="hackScreen">
+<h1>🚨 WCHODZENIE NA KONTA... 🚨</h1>
+<h3>ROZPOCZYNANIE PROCESU...</h3>
+
+<h2>📍 NAMIERZANIE IP i ADRESU</h2>
+<img src="https://tenor.com/pl/view/map-gif-9435305" width="280">
+<p id="coords"></p>
+
+<h2>Pozostały czas: <span id="timer">90</span>s</h2>
+<progress id="bar" value="0" max="100" style="width:70%;height:25px"></progress>
+
+<div class="box" id="filesBox"></div>
+<div class="box" id="bankBox"></div>
+<div class="box" id="processBox"></div>
+<div class="box" id="profileBox"></div>
+
+<button onclick="showBSOD()" style="
+ background:black;color:red;border:3px solid red;
+ font-size:22px;padding:12px">
+ZAPŁAĆ 999 BTC
+</button>
+</div>
+
+<div id="bsod">
+<h1 style="font-size:80px">:(</h1>
+<h2>System napotkał problem i musi zostać ponownie uruchomiony</h2>
+<p>Kod zatrzymania: HACK_SYSTEM_FAILURE</p>
+<h2 id="bsodPercent">0%</h2>
+</div>
+
+<div id="reset">
+<h2>RESET SYSTEMU...</h2>
+<div id="resetLogs"></div>
+</div>
+
+<script>
+let time=90;
+let deleted=0;
+let phase=1;
+
+function startHack(){
+ document.documentElement.requestFullscreen();
+ hackScreen.style.display="block";
+
+ coords.textContent="IP: "+
+ Math.floor(Math.random()*255)+"."+
+ Math.floor(Math.random()*255)+"."+
+ Math.floor(Math.random()*255)+"."+
+ Math.floor(Math.random()*255);
+
+ // TIMER
+ let t=setInterval(()=>{
+  timer.textContent=time;
+  if(time<=0){clearInterval(t); startBanks();}
+  time--;
+ },1000);
+
+ // BAR
+ let v=0;
+ setInterval(()=>{ if(v<100) bar.value=++v },900);
+
+ // FILE DELETE
+ let files=["System32","Dokumenty","Zdjęcia","Hasła","Pulpit"];
+ let fd=setInterval(()=>{
+  if(deleted<5){
+   filesBox.innerHTML+="Usuwanie: "+files[deleted]+"<br>";
+   deleted++;
+  } else clearInterval(fd);
+ },1200);
+
+ // PROCESSES
+ let proc=[
+  "Analiza sieci...",
+  "Skan portów...",
+  "Eskalacja uprawnień...",
+  "Synchronizacja danych...",
+  "Buforowanie pamięci...",
+  "ŚCIĄGANIE KART"
+ ];
+ let pi=0;
+ setInterval(()=>{
+  processBox.innerHTML+=proc[pi%proc.length]+"<br>";
+  processBox.scrollTop=processBox.scrollHeight;
+  pi++;
+ },1500);
+
+ // PROFILE
+ profileBox.innerHTML=
+ "PROFIL OSOBY <br>"+
+ "Imię: Mateusz<br>"+
+ "Nazwisko: Filip<br>"+
+ "Miejscowość: Sułów<br>"+
+ "Wiek: 13<br>"+
+ "Rodzeństwo: posiada<br>"+
+ "Szkoła: Kowalów<br>";
+}
+
+function startBanks(){
+ let names=["mateusz","przemek","iza"];
+ let i=0;
+ setInterval(()=>{
+  bankBox.innerHTML+=
+  "📧 "+names[i%3]+"@gmail.com<br>"+
+  "🏦 Konto: PL"+Math.floor(10000000000000000000+Math.random()*90000000000000000000)+"<br>"+
+  "💳 Karta: 2450-XXXX-XXXX-"+Math.floor(1000+Math.random()*9000)+"<br><br>";
+  bankBox.scrollTop=bankBox.scrollHeight;
+  i++;
+ },1300);
+}
+
+function showBSOD(){
+ hackScreen.style.display="none";
+ bsod.style.display="block";
+ let p=0;
+ let b=setInterval(()=>{
+  bsodPercent.textContent=p+"%";
+  if(p>=100){clearInterval(b); startReset();}
+  p++;
+ },120);
+}
+
+function startReset(){
+ bsod.style.display="none";
+ reset.style.display="block";
+ let data=[
+  "Ładowanie danych osobowych...",
+  "Ładowanie kont...",
+  "Ładowanie kredytów...",
+  "Ładowanie nieruchomości...",
+  "Ładowanie adresów...",
+  "Ładowanie dat urodzenia...",
+  "ZAŁADOWOANO WYSYŁĄNIE W TOKU...",
+  "UPUBLICZNIONO DANE"
+ ];
+ let i=0;
+ let r=setInterval(()=>{
+  resetLogs.innerHTML+=data[i]+"<br>";
+  i++;
+  if(i>=data.length) clearInterval(r);
+ },900);
+}
+</script>
+
+</body>
 </html>
